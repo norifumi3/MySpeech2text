@@ -1,0 +1,16 @@
+[
+  {
+    "Id": "1aab1435-fbae-4065-a458-ee6bc4012600",
+    "EntryType": 1,
+    "Original": "\u30BF\u30A4\u30D7\u30A6\u30A3\u30B9\u30D1\u30FC",
+    "Replacement": "TypeWhisper",
+    "CaseSensitive": false,
+    "CtcMinSimilarity": null,
+    "IsRegex": false,
+    "IsEnabled": true,
+    "Source": "manual",
+    "UsageCount": 0,
+    "CreatedAt": "2026-10-17T23:43:09.6680474Z",
+    "UpdatedAt": "2026-10-17T23:43:09.6680503Z"
+  }
+]

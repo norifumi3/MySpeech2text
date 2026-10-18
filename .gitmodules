@@ -1,0 +1,4 @@
+[submodule "external/typewhisper-win"]
+	path = external/typewhisper-win
+	url = https://github.com/TypeWhisper/typewhisper-win.git
+	branch = release/1.1

@@ -1,0 +1,56 @@
+{
+  "_comment": "TypeWhisper の Integrations（設定 → プラグインを見つける）からインストールするプラグイン。順番どおりに入れる。version は 2026-10-18 時点でカタログにあったもの。新しい版が出ていればそれでよいが、minHostVersion がホスト（v1.1.0 は内部的に 1.1.6 を名乗る）を超えると表示されない。",
+  "host": { "app": "TypeWhisper for Windows", "version": "1.1.0", "package": "TypeWhisper-win-x64-Portable.zip", "releaseTag": "v1.1.0" },
+  "plugins": [
+    {
+      "order": 1,
+      "id": "com.typewhisper.soniox",
+      "displayName": "Soniox",
+      "category": "Transcription",
+      "version": "1.3.3",
+      "requiresApiKey": true,
+      "apiKeyNote": "Soniox コンソールで発行。プロジェクトのリージョンと下の region を一致させること（US プロジェクトなら us）",
+      "settingsAfterInstall": {
+        "region": "us",
+        "model": "default (stt-rt-v5)",
+        "steps": ["API キーを入力（ユーザー）", "Region = United States を確認", "設定を保存", "接続を確認", "選択したモデルを使用"]
+      },
+      "settingsFile": "TypeWhisper-WinUI/PluginData/com.typewhisper.soniox/settings.json"
+    },
+    {
+      "order": 2,
+      "id": "com.typewhisper.filler-words",
+      "displayName": "Filler Words",
+      "category": "Post-processing",
+      "version": "1.1.0",
+      "requiresApiKey": false,
+      "settingsAfterInstall": {
+        "words": "既定 26 語 + あー, えー（カンマ区切り 1 行で保存可）",
+        "collapseRepeatedWords": true,
+        "steps": ["語リストに あー, えー が含まれることを確認（スナップショット適用済みなら自動で入る）"]
+      },
+      "settingsFile": "TypeWhisper-WinUI/PluginData/com.typewhisper.filler-words/settings.json"
+    },
+    {
+      "order": 3,
+      "id": "com.typewhisper.claude",
+      "displayName": "Claude",
+      "category": "LLM",
+      "version": "1.1.1",
+      "requiresApiKey": true,
+      "apiKeyNote": "Anthropic Console で発行",
+      "settingsAfterInstall": {
+        "defaultTextModel": "claude-haiku-5-5",
+        "temperatureMode": "providerDefault",
+        "steps": ["API キーを入力（ユーザー）", "Refresh models を押す（押さないと Haiku 5.5 が出ない）", "Default text model = claude-haiku-5-5", "設定を保存"]
+      },
+      "settingsFile": "TypeWhisper-WinUI/PluginData/com.typewhisper.claude/settings.json"
+    }
+  ],
+  "afterPlugins": [
+    "設定 → ワークフロー → デフォルトLLM = Claude / claude-haiku-5-5（スナップショットの workflow-llm-default.json で入るはずだが画面で確認）",
+    "設定 → ワークフロー に「スマートフォーマット (Haiku 5.5)」（グローバルフォールバック、有効）があることを確認",
+    "設定 → 音声 → 無音で停止 ON / 10 秒 を確認",
+    "設定 → ディクテーション → プロバイダー = Soniox、第1優先言語 = 日本語 を確認"
+  ]
+}

@@ -1,0 +1,41 @@
+[
+  {
+    "Id": "901d25ed901f4a73bedfb1d78e7e668e",
+    "Name": "\u30B9\u30DE\u30FC\u30C8\u30D5\u30A9\u30FC\u30DE\u30C3\u30C8 (Haiku 5.5)",
+    "Icon": "workflow",
+    "IsEnabled": true,
+    "SortOrder": 0,
+    "Template": "CleanedText",
+    "Trigger": {
+      "Kind": "Global",
+      "ProcessNames": [],
+      "WebsitePatterns": [],
+      "Hotkeys": [],
+      "HotkeyBehavior": "StartDictation",
+      "ContextMatchMode": "All",
+      "HasValues": true
+    },
+    "Behavior": {
+      "MemoryPluginId": null,
+      "Settings": {},
+      "FineTuning": "",
+      "ProviderOverride": "__default__",
+      "ModelOverride": "",
+      "InputLanguage": null,
+      "InputLanguageHints": [],
+      "SelectedTask": null,
+      "TranslationTarget": null,
+      "WhisperModeOverride": null,
+      "TranscriptionModelOverride": null
+    },
+    "Output": {
+      "Format": null,
+      "AutoEnter": false,
+      "autoEnterModeRaw": null,
+      "TargetActionPluginId": null,
+      "numberNormalizationModeRaw": null
+    },
+    "CreatedAt": "2026-10-17T23:18:39.4932531Z",
+    "UpdatedAt": "2026-10-17T23:18:39.4942835Z"
+  }
+]
