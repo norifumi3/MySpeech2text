@@ -29,12 +29,19 @@
       },
       "settingsFile": "TypeWhisper-WinUI/PluginData/com.typewhisper.soniox/settings.json",
       "modifiedDll": {
-        "note": "インストール後、TypeWhisper を終了して tools/install-soniox-terms.ps1 を実行し、改変版 DLL（辞書の用語を context.terms として送る）に差し替える。元に戻すときは -Restore。",
+        "note": "インストール後、TypeWhisper を終了して tools/install-soniox-terms.ps1 を実行する。既定ではリリースからビルド済み DLL をダウンロードし SHA256 を照合して差し替える。-Build でソースからビルド、-Restore で元に戻す。",
         "source": "external/typewhisper-win（norifumi3/typewhisper-win の soniox-context-terms ブランチ、非公開）",
         "requires": [
-          ".NET 10 SDK",
-          "git submodule update --init（gh auth login 済み）"
-        ]
+          "gh（gh auth login 済み。fork が非公開のため）",
+          "-Build のときのみ: .NET 10 SDK と git submodule update --init"
+        ],
+        "release": {
+          "repo": "norifumi3/typewhisper-win",
+          "tag": "soniox-terms-1.3.3-1",
+          "asset": "TypeWhisper.Plugin.Soniox.dll",
+          "sha256": "8B5C3423703C4E3A2CAB3FCAD0B50BB5E1C144C536DC2AC5D79D509DA39B2635",
+          "commit": "e3c73efd"
+        }
       }
     },
     {

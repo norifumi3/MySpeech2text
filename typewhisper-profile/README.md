@@ -9,7 +9,7 @@
 - `apply-profile.ps1` … スナップショットを新 PC の `%LOCALAPPDATA%\TypeWhisper-WinUI` に適用するスクリプト
 - `tools/tw-ui.ps1` … Claude Code が設定画面を自動操作するための UI Automation ヘルパー
 - `tools/soniox-ws-probe.ps1` … Soniox の疎通テスト（残高・リージョンの問題を確定させる）。`-Terms` で context.terms の効果も試せる
-- `tools/install-soniox-terms.ps1` … 改変版 Soniox プラグイン（辞書の用語を context.terms として送る）をビルドして DLL を差し替える
+- `tools/install-soniox-terms.ps1` … 改変版 Soniox プラグイン（辞書の用語を context.terms として送る）の DLL をダウンロードして差し替える（`-Build` でソースからビルド、`-Restore` で元に戻す）
 
 ## 0. TypeWhisper 標準機能では再現できない理由
 
@@ -87,7 +87,8 @@ powershell -ExecutionPolicy Bypass -File .\typewhisper-profile\apply-profile.ps1
 1. `TypeWhisper.exe` を起動。スナップショットの `setup.json` はウィザード完了済み（`Completed: true`）なので、初回ウィザードは通常出ない。出た場合は「セットアップをスキップ」でよい（設定ウィンドウが閉じたら再度 exe を起動すると戻る）。
 2. 設定 → 「プラグインを見つける」から上の表の順にインストールし、導入後の設定を行う。
    Soniox をインストールしたら、TypeWhisper を終了して `tools/install-soniox-terms.ps1` を実行し、改変版 DLL に差し替えてから再起動する。
-   前提は submodule の取得（非公開 fork なので `gh auth login` 済みであること）と .NET 10 SDK。元に戻すときは `-Restore`。
+   既定では、非公開 fork のリリース `soniox-terms-1.3.3-1` からビルド済み DLL をダウンロードし、SHA256 を照合して差し替える（前提は `gh auth login` だけ。ビルド不要）。
+   ソースからビルドしたいときは `-Build`（.NET 10 SDK と submodule が必要）。元に戻すときは `-Restore`。
    アプリ内で Soniox プラグインを更新すると差し替えは上書きされるので、そのときは再実行する。
 3. 設定 → ワークフロー で「スマートフォーマット (Haiku 5.5)」が存在し、右上「デフォルトLLM」が Claude / claude-haiku-5-5 になっていることを確認。
 4. 設定 → 音声 で「無音で停止」が ON・10 秒になっていることを確認。
@@ -160,4 +161,4 @@ Claude 側の補足:
 - .NET 10 SDK 10.0.402 と Windows SDK 10.0.26100（`winget install Microsoft.WindowsSDK.10.0.26100`）
 - NuGet ソースに nuget.org を登録
 - `external/typewhisper-win` は非公開 fork `norifumi3/typewhisper-win` の `soniox-context-terms` ブランチ（v1.1.0 + Soniox の context.terms 対応）。取得には GitHub の認証が必要
-- 上流の v1.1.0 で `dotnet build TypeWhisper.slnx` が 0 エラーで通ることを確認済み（約 1 分 20 秒）。Soniox プラグイン単体は `tools/install-soniox-terms.ps1` がビルドする
+- 上流の v1.1.0 で `dotnet build TypeWhisper.slnx` が 0 エラーで通ることを確認済み（約 1 分 20 秒）。Soniox プラグイン単体は `tools/install-soniox-terms.ps1 -Build` でビルドできる。DLL を作り直したら、fork に新しいリリースを作り、スクリプトの `$Tag` と `$Sha256` を更新する
