@@ -30,12 +30,12 @@
 | 文字起こし | Soniox プラグイン v1.3.3、Region = **United States**、モデル既定（stt-rt-v5） |
 | 後処理 | Filler Words プラグイン v1.1.0、既定 26 語＋「あー」「えー」、連続語の折り畳み ON |
 | LLM 整形 | Claude プラグイン v1.1.1、Default text model = **claude-haiku-5-5**、Temperature = Provider default |
-| ワークフロー | 「スマートフォーマット (Haiku 5.5)」: テンプレート CleanedText、起動方法 = グローバルフォールバック、有効、出力 = テキストを挿入 |
+| ワークフロー | 「スマートフォーマット (Haiku 5.5)」: テンプレート CleanedText、起動方法 = グローバルフォールバック、有効、出力 = テキストを挿入。微調整指示（Fine-tuning）: Azure／Microsoft の用語がカタカナの音写で出たら公式の英語表記に直し、「仮想マシン」のような漢字の和訳は残す |
 | デフォルト LLM | Claude / claude-haiku-5-5 |
 | ショートカット | ALT+WIN と CTRL+ALT+SHIFT+COMMA（録音モード = ハイブリッド） |
 | 音声 | 無音で停止 ON、10 秒。音のフィードバック ON、ダッキング OFF、プリロール OFF |
 | ディクテーション | 第 1 優先言語 = 日本語、数字正規化 ON、アプリベースの書式 ON、直接挿入、元の入力欄にのみ貼り付け ON |
-| 辞書 | 修正 1 件: 「タイプウィスパー」→「TypeWhisper」 |
+| 辞書 | 修正 1 件（正規表現）: `(タイプ\|パイプ)ウィスパー\|Type\s*Whisper` →「TypeWhisper」。表記ゆれ（パイプウィスパー、Type Whisper）もまとめて置き換える（表中の `\|` は `|` のこと） |
 
 ## 2. 前提条件（新 PC 側で用意するもの）
 

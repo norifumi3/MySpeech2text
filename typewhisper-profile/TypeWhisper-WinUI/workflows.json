@@ -18,7 +18,7 @@
     "Behavior": {
       "MemoryPluginId": null,
       "Settings": {},
-      "FineTuning": "",
+      "FineTuning": "Azure／Microsoft の用語がカタカナの音写（例: バーチャルマシン、アプリケーションゲートウェイ）で出てきたら、公式の英語表記に直す。「仮想マシン」のような漢字の和訳はそのまま残す。英単語どうしの間は半角スペースで区切る。",
       "ProviderOverride": "__default__",
       "ModelOverride": "",
       "InputLanguage": null,
@@ -36,6 +36,6 @@
       "numberNormalizationModeRaw": null
     },
     "CreatedAt": "2026-10-17T23:18:39.4932531Z",
-    "UpdatedAt": "2026-10-17T23:18:39.4942835Z"
+    "UpdatedAt": "2026-10-18T01:46:17.1420859Z"
   }
 ]
