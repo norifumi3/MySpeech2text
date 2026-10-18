@@ -1,4 +1,4 @@
 [submodule "external/typewhisper-win"]
 	path = external/typewhisper-win
-	url = https://github.com/TypeWhisper/typewhisper-win.git
-	branch = release/1.1
+	url = https://github.com/norifumi3/typewhisper-win.git
+	branch = soniox-context-terms
