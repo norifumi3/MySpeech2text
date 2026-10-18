@@ -4,7 +4,8 @@
 param(
   [string]$Region = 'us',
   [string[]]$Languages = @('ja','en'),
-  [string]$Text = 'こんにちは。これはタイプウィスパーの動作確認です。今日はいい天気ですね。'
+  [string]$Text = 'こんにちは。これはタイプウィスパーの動作確認です。今日はいい天気ですね。',
+  [string[]]$Terms = @()   # 指定すると context.terms として送る
 )
 $ErrorActionPreference = 'Stop'
 Add-Type -AssemblyName System.Security, System.Speech
@@ -37,7 +38,9 @@ $ws.Options.SetRequestHeader('Authorization', "Bearer $key")
 $cts = [Threading.CancellationTokenSource]::new([TimeSpan]::FromSeconds(60))
 $ws.ConnectAsync([Uri]$uri, $cts.Token).Wait()
 "connected: $($ws.State)"
-$cfg = @{ model = 'stt-rt-v5'; audio_format = 'pcm_s16le'; sample_rate = 16000; num_channels = 1; language_hints = $Languages; enable_language_identification = $true; enable_endpoint_detection = $true } | ConvertTo-Json -Compress
+$cfgObj = @{ model = 'stt-rt-v5'; audio_format = 'pcm_s16le'; sample_rate = 16000; num_channels = 1; language_hints = $Languages; enable_language_identification = $true; enable_endpoint_detection = $true }
+if ($Terms.Count -gt 0) { $cfgObj.context = @{ terms = $Terms } }
+$cfg = $cfgObj | ConvertTo-Json -Compress -Depth 5
 "config: $cfg"
 $cfgBytes = [Text.Encoding]::UTF8.GetBytes($cfg)
 $ws.SendAsync([ArraySegment[byte]]::new($cfgBytes), 'Text', $true, $cts.Token).Wait()
@@ -79,4 +82,8 @@ try { $ws.Abort() } catch {}
 "==== server messages ($($log.Count)) ===="
 $i = 0
 foreach ($m in $log) { $i++; if ($m.Length -gt 600) { "[$i] " + $m.Substring(0, 600) + " ...(" + $m.Length + " chars)" } else { "[$i] $m" } }
+# 確定トークンを連結した最終テキスト
+$final = foreach ($m in $log) { if ($m.StartsWith('{')) { try { (ConvertFrom-Json $m).tokens | Where-Object { $_.is_final -and $_.text -notmatch '^<.+>$' } | ForEach-Object { $_.text } } catch {} } }
+"==== final text ===="
+-join $final
 $key = $null
