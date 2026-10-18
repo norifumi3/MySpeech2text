@@ -1,6 +1,11 @@
 {
   "_comment": "TypeWhisper の Integrations（設定 → プラグインを見つける）からインストールするプラグイン。順番どおりに入れる。version は 2026-10-18 時点でカタログにあったもの。新しい版が出ていればそれでよいが、minHostVersion がホスト（v1.1.0 は内部的に 1.1.6 を名乗る）を超えると表示されない。",
-  "host": { "app": "TypeWhisper for Windows", "version": "1.1.0", "package": "TypeWhisper-win-x64-Portable.zip", "releaseTag": "v1.1.0" },
+  "host": {
+    "app": "TypeWhisper for Windows",
+    "version": "1.1.0",
+    "package": "TypeWhisper-win-x64-Portable.zip",
+    "releaseTag": "v1.1.0"
+  },
   "plugins": [
     {
       "order": 1,
@@ -13,9 +18,24 @@
       "settingsAfterInstall": {
         "region": "us",
         "model": "default (stt-rt-v5)",
-        "steps": ["API キーを入力（ユーザー）", "Region = United States を確認", "設定を保存", "接続を確認", "選択したモデルを使用"]
+        "steps": [
+          "API キーを入力（ユーザー）",
+          "Region = United States を確認",
+          "設定を保存",
+          "接続を確認",
+          "選択したモデルを使用",
+          "TypeWhisper を終了し tools/install-soniox-terms.ps1 で DLL を差し替えて再起動"
+        ]
       },
-      "settingsFile": "TypeWhisper-WinUI/PluginData/com.typewhisper.soniox/settings.json"
+      "settingsFile": "TypeWhisper-WinUI/PluginData/com.typewhisper.soniox/settings.json",
+      "modifiedDll": {
+        "note": "インストール後、TypeWhisper を終了して tools/install-soniox-terms.ps1 を実行し、改変版 DLL（辞書の用語を context.terms として送る）に差し替える。元に戻すときは -Restore。",
+        "source": "external/typewhisper-win（norifumi3/typewhisper-win の soniox-context-terms ブランチ、非公開）",
+        "requires": [
+          ".NET 10 SDK",
+          "git submodule update --init（gh auth login 済み）"
+        ]
+      }
     },
     {
       "order": 2,
@@ -27,7 +47,9 @@
       "settingsAfterInstall": {
         "words": "既定 26 語 + あー, えー（カンマ区切り 1 行で保存可）",
         "collapseRepeatedWords": true,
-        "steps": ["語リストに あー, えー が含まれることを確認（スナップショット適用済みなら自動で入る）"]
+        "steps": [
+          "語リストに あー, えー が含まれることを確認（スナップショット適用済みなら自動で入る）"
+        ]
       },
       "settingsFile": "TypeWhisper-WinUI/PluginData/com.typewhisper.filler-words/settings.json"
     },
@@ -42,7 +64,12 @@
       "settingsAfterInstall": {
         "defaultTextModel": "claude-haiku-5-5",
         "temperatureMode": "providerDefault",
-        "steps": ["API キーを入力（ユーザー）", "Refresh models を押す（押さないと Haiku 5.5 が出ない）", "Default text model = claude-haiku-5-5", "設定を保存"]
+        "steps": [
+          "API キーを入力（ユーザー）",
+          "Refresh models を押す（押さないと Haiku 5.5 が出ない）",
+          "Default text model = claude-haiku-5-5",
+          "設定を保存"
+        ]
       },
       "settingsFile": "TypeWhisper-WinUI/PluginData/com.typewhisper.claude/settings.json"
     }
@@ -51,6 +78,7 @@
     "設定 → ワークフロー → デフォルトLLM = Claude / claude-haiku-5-5（スナップショットの workflow-llm-default.json で入るはずだが画面で確認）",
     "設定 → ワークフロー に「スマートフォーマット (Haiku 5.5)」（グローバルフォールバック、有効）があることを確認",
     "設定 → 音声 → 無音で停止 ON / 10 秒 を確認",
-    "設定 → ディクテーション → プロバイダー = Soniox、第1優先言語 = 日本語 を確認"
+    "設定 → ディクテーション → プロバイダー = Soniox、第1優先言語 = 日本語 を確認",
+    "設定 → 外観 → レイアウトをカスタマイズ: インジケーターが画面上・中央、ライブテキストがフローティング表示であることを確認し、ライブテキストの位置と大きさを調整する"
   ]
 }
