@@ -82,13 +82,13 @@ powershell -ExecutionPolicy Bypass -File .\typewhisper-profile\apply-profile.ps1
 | 3 | Claude | `com.typewhisper.claude` | 1.1.1 | 必要（ユーザー入力） | **Refresh models** → Default text model = claude-haiku-5-5 → 設定を保存 |
 
 手順:
-1. `TypeWhisper.exe` を起動。初回ウィザードは「セットアップをスキップ」でよい（設定ウィンドウが閉じたら再度 exe を起動すると戻る）。
+1. `TypeWhisper.exe` を起動。スナップショットの `setup.json` はウィザード完了済み（`Completed: true`）なので、初回ウィザードは通常出ない。出た場合は「セットアップをスキップ」でよい（設定ウィンドウが閉じたら再度 exe を起動すると戻る）。
 2. 設定 → 「プラグインを見つける」から上の表の順にインストールし、導入後の設定を行う。
 3. 設定 → ワークフロー で「スマートフォーマット (Haiku 5.5)」が存在し、右上「デフォルトLLM」が Claude / claude-haiku-5-5 になっていることを確認。
 4. 設定 → 音声 で「無音で停止」が ON・10 秒になっていることを確認。
 
 Claude Code による自動化の範囲（2026-10-18 に実際にこの方法で導入した）:
-- 起動、ウィザードのスキップ、Integrations でのプラグイン検索とインストール、各プラグインの設定変更と保存、Refresh models とモデル選択、
+- 起動、（出た場合は）ウィザードのスキップ、Integrations でのプラグイン検索とインストール、各プラグインの設定変更と保存、Refresh models とモデル選択、
   デフォルト LLM の設定、ワークフロー作成、音声設定の変更は、すべて `tools/tw-ui.ps1`（UI Automation）で代行できる。
 - **止まるのは API キーの入力 2 回だけ**（Soniox と Claude）。ユーザーが開いている設定画面に貼り付ける。キーはチャットに貼らない。
 - 導入済みかどうかは `%LOCALAPPDATA%\TypeWhisper-WinUI\PluginPackages\installed.json` で確認できる（ID と版が載る）。
