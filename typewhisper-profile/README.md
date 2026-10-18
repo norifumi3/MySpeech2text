@@ -32,7 +32,7 @@
 | LLM 整形 | Claude プラグイン v1.1.1、Default text model = **claude-haiku-5-5**、Temperature = Provider default |
 | ワークフロー | 「スマートフォーマット (Haiku 5.5)」: テンプレート CleanedText、起動方法 = グローバルフォールバック、有効、出力 = テキストを挿入 |
 | デフォルト LLM | Claude / claude-haiku-5-5 |
-| ショートカット | CTRL+SHIFT と ALT+WIN（録音モード = ハイブリッド） |
+| ショートカット | ALT+WIN と CTRL+ALT+SHIFT+COMMA（録音モード = ハイブリッド） |
 | 音声 | 無音で停止 ON、10 秒。音のフィードバック ON、ダッキング OFF、プリロール OFF |
 | ディクテーション | 第 1 優先言語 = 日本語、数字正規化 ON、アプリベースの書式 ON、直接挿入、元の入力欄にのみ貼り付け ON |
 | 辞書 | 修正 1 件: 「タイプウィスパー」→「TypeWhisper」 |
@@ -95,7 +95,7 @@ Claude Code による自動化の範囲（2026-10-18 に実際にこの方法で
 
 ### 3.4 検証
 
-1. メモ帳で CTRL+SHIFT → 話す → CTRL+SHIFT。整形済みテキストが挿入されること。
+1. メモ帳で ALT+WIN → 話す → ALT+WIN。整形済みテキストが挿入されること。
 2. `%LOCALAPPDATA%\TypeWhisper-WinUI\diagnostics.jsonl` の末尾に `dictation.transcribed` → `delivery.completed` が並ぶこと。
    `dictation.failed` が出る場合は §5 を参照。
 3. 停止から挿入までの目安: 整形なし約 0.5 秒、Haiku 整形ありで約 1.4〜2.5 秒。
@@ -127,6 +127,7 @@ Claude 側の補足:
 | Portable 版が起動しない | .NET 10 ランタイム未導入 | §3.1 |
 | `dotnet build` が全パッケージ NU1100 | NuGet.Config にソースが無い PC だった | `dotnet nuget add source https://api.nuget.org/v3/index.json -n nuget.org`（開発する場合のみ） |
 | ショートカット開始直後に `shortcut.cancel` | 連打・押し直し | トグル式なので「押す→話す→押す」。ハイブリッドでは 300 ms 以上の長押しは離すと停止 |
+| 長い組み合わせを押すと `shortcut.start` の数 ms 後に `shortcut.cancel` | 修飾キーだけの短いショートカット（例: CTRL+SHIFT）が、長い組み合わせを押す途中で先に反応している | 長い組み合わせの途中の形になる修飾キーだけのショートカットを登録しない（CTRL+SHIFT はこれで削除した）。Win を含む長い組み合わせを追加すると、ALT+WIN が同じ問題を起こす |
 
 ## 6. スナップショットに含めたファイルと除外したもの
 
