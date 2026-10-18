@@ -45,7 +45,38 @@
 - Soniox の API キー（**US リージョンのプロジェクト**で発行したもの。Region を Japan にするなら JP プロジェクトのキーが必要）
 - Soniox の残高（新規アカウントに無料枠は無い。2025-10-27 に廃止。残高 0 だと 402 で失敗する）
 - Anthropic の API キー
-- `winget` と `gh`（GitHub CLI）が使えること。`gh` は `gh auth login` 済み
+- `winget` と `gh`（GitHub CLI）が使えること。`gh` は認証済み（**会社 PC では下の §2.1 の読み取り専用トークンで認証する**）
+
+### 2.1 会社 PC で使う場合（読み取り専用。push は絶対にしない）
+
+**会社 PC からは、自分の GitHub リポジトリ（`norifumi3/MySpeech2text`、`norifumi3/typewhisper-win`）に一切書き込まない。clone とダウンロードだけを行う。**
+commit、push、タグやリリースの作成、Issue や PR の作成もしない。手順書や設定を直したくなったら、個人 PC で直して push し、会社 PC では pull し直す。
+
+会社 PC では **アプリを実行するだけ** なので、ソースコード（submodule）、.NET SDK、Windows SDK は不要。必要なのは次の 3 つだけ。
+- このリポジトリ本体（`typewhisper-profile/` の手順書・設定スナップショット・スクリプト）。**submodule は取得しない**
+- 改変版 Soniox DLL（`install-soniox-terms.ps1` がリリースからダウンロードする。`-Build` は使わない）
+- .NET 10 の実行環境（`winget install Microsoft.DotNet.DesktopRuntime.10`。SDK でも動くが不要。Desktop Runtime だけで動くかは未検証なので、起動しなければ SDK を入れる）
+
+誤って書き込めないように、次の 2 つを両方行う。
+1. **読み取り専用のトークンで認証する**（ブラウザで `gh auth login` すると書き込み権限付きになるので使わない）
+   - GitHub の Settings → Developer settings → Fine-grained personal access tokens で作成する。
+   - Repository access: `norifumi3/MySpeech2text`（clone 用）と `norifumi3/typewhisper-win`（DLL のリリースをダウンロードする用）の 2 つだけ。
+   - Permissions: **Contents = Read-only**（Metadata = Read-only は自動で付く）。それ以外は付けない。
+   - 有効期限は短めにする。トークンは自分で入力し、チャットやファイルには貼らない: `gh auth login --with-token`（標準入力に貼る）。
+   - これで、もし push しようとしてもサーバー側で拒否される。clone と `gh release download`（DLL のダウンロード）は Contents の読み取りで足りる（見込み。会社 PC で初回に確認する）。
+2. **clone した直後に push 先を無効にする**（ローカルでの二重の安全策）
+   ```powershell
+   git clone https://github.com/norifumi3/MySpeech2text.git   # --recurse-submodules は付けない（ソースは不要）
+   cd MySpeech2text
+   git remote set-url --push origin DISABLED-company-pc-read-only
+   ```
+   `git push` すると存在しない URL のためエラーになる。更新を取り込むときは `git pull` だけを使う。
+
+セットアップの各スクリプト（`apply-profile.ps1`、`install-soniox-terms.ps1`、`tools/*.ps1`）は、リポジトリを読むだけで、書き込み先は `%LOCALAPPDATA%\TypeWhisper-WinUI` だけ。会社 PC で設定を変えても、それをリポジトリに戻す作業はしない。
+
+会社 PC で使う前に、自分で確認しておくこと（未確認。会社の規程による）:
+- 個人の GitHub リポジトリを会社 PC に clone してよいか、個人のトークンを会社 PC に置いてよいか。
+- 音声入力の内容は Soniox（米国）と Anthropic に送られる。業務の内容を話してよいか。
 
 ## 3. 手順
 
@@ -112,7 +143,12 @@ Claude Code による自動化の範囲（2026-10-18 に実際にこの方法で
 > §3.1 と §3.2 は実行してよい。§3.3 のプラグインのインストールと設定は UI Automation で代行してよいが、
 > API キーの入力は私が行うので、入力待ちの箇所で止めて教えて。最後に §3.4 の検証をして、診断ログの結果を報告して。
 
+会社 PC で使うときは、次の 1 文を必ず足す:
+
+> **この PC は会社 PC。§2.1 に従い、GitHub への書き込み（git commit、git push、タグ、gh release create、gh repo・gh pr・gh issue の作成や編集）は一切しないこと。clone、pull、ダウンロードだけ行うこと。**
+
 Claude 側の補足:
+- 会社 PC では GitHub に書き込まない（§2.1）。手順書の誤りに気づいても、会社 PC ではリポジトリを直さず、ユーザーに報告するだけにする。
 - `tools/tw-ui.ps1` … 設定ウィンドウの UI Automation ヘルパー。`-Click '<名前の部分一致>'` でボタン／リスト項目を押し、`-Dump` で表示テキストを列挙、`-Shot <名前>` で `PrintWindow` によるスクリーンショットを保存する（`CopyFromScreen` はこの実行環境では失敗する）。
   - インストールボタンの UIA 名は「マーケットプレイスの主要な操作」（表示は「インストール」）。
   - サイドバーは「設定カテゴリ: 音声」「設定の統合: Soniox」のような名前。
